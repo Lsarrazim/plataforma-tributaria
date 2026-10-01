@@ -2,6 +2,7 @@ import os
 import json
 import anthropic
 from dotenv import load_dotenv
+from app.repositories.calculo_repository import salvar_calculo
 
 load_dotenv()
 
@@ -55,6 +56,12 @@ def agente_apuracao(mensagem: str) -> str:
 
     if bloco_tool.name == "calcular_icms":
         resultado = calcular_icms(**bloco_tool.input)
+        salvar_calculo(
+            mensagem=mensagem,
+            valor=bloco_tool.input["valor"],
+            aliquota=bloco_tool.input["aliquota"],
+            resultado=resultado,
+        )
     else:
         resultado = "ferramenta desconhecida"
 
